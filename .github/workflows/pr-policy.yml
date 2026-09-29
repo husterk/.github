@@ -1,0 +1,21 @@
+name: PR policy
+
+# Runs the linked-issue action from this checkout, so every change to the
+# action is tested on its own pull request before a release can ship it.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  linked-issue:
+    name: Linked issue
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./actions/linked-issue

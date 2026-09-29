@@ -1,0 +1,49 @@
+name: Linked issue
+description: >-
+  Fail a pull request whose body does not close an open issue in the same
+  repository. Pull requests from Renovate, Dependabot and GitHub Actions are
+  exempt.
+
+inputs:
+  token:
+    description: "Token that can read issues in the repository. The job needs `issues: read`."
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - name: Require a linked open issue
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        EVENT: ${{ github.event_name }}
+        AUTHOR: ${{ github.event.pull_request.user.login }}
+        BODY: ${{ github.event.pull_request.body }}
+        REPO: ${{ github.repository }}
+      run: |
+        case "$EVENT" in
+          pull_request | pull_request_target) ;;
+          *)
+            echo "::error::Linked issue only runs on pull_request events, not '$EVENT'."
+            exit 1
+            ;;
+        esac
+        case "$AUTHOR" in
+          renovate\[bot\] | github-actions\[bot\] | dependabot\[bot\])
+            echo "Bot PR from $AUTHOR: exempt."
+            exit 0
+            ;;
+        esac
+        number="$(printf '%s\n' "$BODY" |
+          grep -oiE '\b(close[sd]?|fix(e[sd])?|resolve[sd]?)[[:space:]]+#[0-9]+' |
+          head -1 | grep -oE '[0-9]+$' || true)"
+        if [ -z "$number" ]; then
+          echo "::error::The PR body must link an issue with 'Closes #<number>'. Create the issue first."
+          exit 1
+        fi
+        state="$(gh issue view "$number" --repo "$REPO" --json state --jq .state 2> /dev/null || true)"
+        if [ "$state" != "OPEN" ]; then
+          echo "::error::Issue #$number is not an open issue in $REPO (state: ${state:-not found})."
+          exit 1
+        fi
+        echo "Linked to open issue #$number."
