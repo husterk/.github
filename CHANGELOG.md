@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.1
+
+- The guides record that a repository set to "selected actions" runs
+  husterk's own actions without an allowlist pattern (proven on a public
+  repository).
+- `templates/pr-policy.yml` pins the linked-issue action to the `v1.0.0`
+  commit instead of a placeholder.
+
 ## v1.0.0
 
 First release.
