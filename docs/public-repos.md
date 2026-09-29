@@ -282,13 +282,13 @@ With strict checks on, update a PR branch by rebasing locally, then run
 
 ## 5. GitHub Actions
 
-| Setting                            | Value                                                                                                 |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Allowed actions                    | Selected: GitHub-owned, plus the exact third-party patterns the workflows use. Verified creators off. |
-| SHA pinning                        | Required                                                                                              |
-| Default `GITHUB_TOKEN` permissions | Read-only, and it cannot approve PRs                                                                  |
-| Fork PR workflow approval          | All external contributors                                                                             |
-| Workflow files                     | Top-level `permissions: contents: read`. Grant more per job, only where a job needs it.               |
+| Setting                            | Value                                                                                                                                                                                                                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Allowed actions                    | Selected: GitHub-owned, plus the exact third-party patterns the workflows use. Verified creators off. Actions owned by husterk, such as `husterk/.github/actions/linked-issue`, need no pattern: dotfiles runs it with only `jdx/mise-action@*` and the Nix installer allowed. |
+| SHA pinning                        | Required                                                                                                                                                                                                                                                                       |
+| Default `GITHUB_TOKEN` permissions | Read-only, and it cannot approve PRs                                                                                                                                                                                                                                           |
+| Fork PR workflow approval          | All external contributors                                                                                                                                                                                                                                                      |
+| Workflow files                     | Top-level `permissions: contents: read`. Grant more per job, only where a job needs it.                                                                                                                                                                                        |
 
 List the third-party actions a repo uses:
 
