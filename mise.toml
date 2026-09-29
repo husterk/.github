@@ -22,6 +22,10 @@ lockfile = true
 description = "Run every CI lint gate: formatting, shellcheck, actionlint, US spelling"
 depends = ["format-check", "lint"]
 
+[tasks.audit]
+description = "Compare a repository with the baseline in docs/ (read-only): mise run audit -- OWNER/REPO"
+run = "scripts/audit-repo.sh"
+
 [tasks.self-test]
 description = "Renovate lookup against the fixture with the presets in this working tree"
 run = "scripts/self-test.sh --local"
