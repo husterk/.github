@@ -21,6 +21,12 @@
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "github actions"
+    },
+    {
+      "description": "One PR per husterk/.github release, covering the presets and the action, opened without waiting for the schedule",
+      "matchDepNames": ["husterk/.github"],
+      "groupName": "husterk .github",
+      "schedule": ["at any time"]
     }
   ]
 }
