@@ -1,0 +1,12 @@
+[global]
+excludes = ["**/.git/**", "LICENSE", "*.lock", "*.toml", "*.py", ".editorconfig", ".gitignore"]
+
+[formatter.prettier]
+command = "prettier"
+includes = ["*.md", "*.json", "*.yaml", "*.yml"]
+options = ["--write"]
+
+[formatter.shell]
+command = "shfmt"
+includes = ["*.sh"]
+options = ["-ln", "bash", "-i", "2", "-sr", "-ci", "-w"]

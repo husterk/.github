@@ -1,0 +1,30 @@
+min_version = "2026.1.2"
+
+[tools]
+"aqua:numtide/treefmt" = "2.6.0"
+"aqua:rhysd/actionlint" = "1.7.12"
+jq = "1.8.2"
+node = "24.21.0"
+prettier = "3.9.9"
+shellcheck = "0.11.0"
+shfmt = "3.14.1"
+
+[settings]
+experimental = true
+lockfile = true
+
+[tasks.check]
+description = "Run every CI lint gate: formatting, shellcheck, actionlint, US spelling"
+depends = ["format-check", "lint"]
+
+[tasks.format]
+description = "Format every file treefmt covers"
+run = "treefmt"
+
+[tasks.format-check]
+description = "Fail if any file is not formatted (writes fixes, then fails)"
+run = "treefmt --ci"
+
+[tasks.lint]
+description = "shellcheck, actionlint and the US spelling scanner"
+run = "scripts/lint.sh"
