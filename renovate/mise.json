@@ -36,7 +36,7 @@
     {
       "description": "1Password publishes the CLI only on its own site. Its release history lists every version, and betas are skipped because their paths carry a suffix after the patch number. rangeStrategy pin rejects versions from this datasource as invalid, so this rule uses replace.",
       "matchManagers": ["mise"],
-      "matchDepNames": ["op", "vfox:op"],
+      "matchDepNames": ["1password", "op", "vfox:op"],
       "overrideDatasource": "custom.1password-cli",
       "overridePackageName": "1password-cli",
       "extractVersion": "/op2/pkg/v(?<version>\\d+\\.\\d+\\.\\d+)/op_darwin_arm64_",
