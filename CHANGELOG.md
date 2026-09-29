@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.1
+
+- `renovate/mise` also resolves the 1Password CLI when `mise.toml` names it
+  `1password` rather than `op`.
+
 ## v1.1.0
 
 - `renovate/default` groups every `husterk/.github` reference, presets and

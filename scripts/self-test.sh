@@ -99,13 +99,15 @@ for expected in renovate/mise-formatters-and-linters renovate/mise-language-serv
   fi
 done
 
-op_update="$(jq -r 'select(.msg == "packageFiles with updates") | .config.mise[]?.deps[]? | select(.depName == "op") | .updates[0].newValue // empty' "$json")"
-if [ -n "$op_update" ]; then
-  echo "PASS op resolves through the 1Password feed (update to $op_update)"
-else
-  echo "FAIL op has no update; the 1Password datasource did not resolve"
-  fail=1
-fi
+for name in op 1password; do
+  update="$(jq -r --arg n "$name" 'select(.msg == "packageFiles with updates") | .config.mise[]?.deps[]? | select(.depName == $n) | .updates[0].newValue // empty' "$json")"
+  if [ -n "$update" ]; then
+    echo "PASS $name resolves through the 1Password release history (update to $update)"
+  else
+    echo "FAIL $name has no update; the 1Password datasource did not resolve"
+    fail=1
+  fi
+done
 
 dotgithub_branches="$(jq -r 'select(.msg == "packageFiles with updates") | .config[]?[]?.deps[]? | select(.depName == "husterk/.github") | .updates[]?.branchName' "$json" | sort -u)"
 dotgithub_updates="$(jq -r 'select(.msg == "packageFiles with updates") | .config[]?[]?.deps[]? | select(.depName == "husterk/.github") | .updates[]?.branchName' "$json" | wc -l | tr -d ' ')"
