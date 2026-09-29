@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.0
+
+- `renovate/default` groups every `husterk/.github` reference, presets and
+  the linked-issue action alike, into one PR per release, opened at any
+  time instead of on the bimonthly schedule.
+- `scripts/self-test.sh` runs Renovate with its own empty cache and checks
+  that the grouping holds.
+
 ## v1.0.2
 
 - A private repository under a personal account enforces the Actions
