@@ -5,6 +5,11 @@ min_version = "2026.1.2"
 "aqua:rhysd/actionlint" = "1.7.12"
 jq = "1.8.2"
 node = "24.21.0"
+# @yarnpkg/libzip 3.2.2 was published by hand by a Yarn maintainer without
+# the provenance attestation 3.2.0 and 3.2.1 carry. Its gitHead is Yarn's own
+# release commit for that version, so the trust policy excludes that one
+# version only.
+"npm:renovate" = { version = "44.117.0", trust_policy_excludes = ["@yarnpkg/libzip@3.2.2"] }
 prettier = "3.9.9"
 shellcheck = "0.11.0"
 shfmt = "3.14.1"
@@ -16,6 +21,10 @@ lockfile = true
 [tasks.check]
 description = "Run every CI lint gate: formatting, shellcheck, actionlint, US spelling"
 depends = ["format-check", "lint"]
+
+[tasks.self-test]
+description = "Renovate lookup against the fixture with the presets in this working tree"
+run = "scripts/self-test.sh --local"
 
 [tasks.format]
 description = "Format every file treefmt covers"

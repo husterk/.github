@@ -24,3 +24,20 @@ jobs:
           install: false
       - run: mise install --locked
       - run: mise run check
+
+  self-test:
+    name: Self-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        with:
+          install: false
+      - run: mise install --locked
+      # Loads the presets from GitHub at this commit, the same way dependent
+      # repositories load them at a release tag.
+      - name: Renovate lookup against the fixture
+        env:
+          GITHUB_COM_TOKEN: ${{ github.token }}
+          REF: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: scripts/self-test.sh --ref "$REF"

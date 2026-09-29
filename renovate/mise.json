@@ -1,0 +1,52 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Groups for mise tools, and a lookup for the 1Password CLI. mise names match with matchDepNames because matchPackageNames sees the resolved name, such as mvdan/sh for shfmt.",
+  "packageRules": [
+    {
+      "description": "Group mise formatters and linters",
+      "matchManagers": ["mise"],
+      "matchDepNames": [
+        "actionlint",
+        "aqua:rhysd/actionlint",
+        "aqua:koalaman/shellcheck",
+        "aqua:mvdan/sh",
+        "aqua:numtide/treefmt",
+        "aqua:tamasfe/taplo",
+        "npm:prettier",
+        "prettier",
+        "ruff",
+        "shellcheck",
+        "shfmt",
+        "stylua",
+        "taplo",
+        "treefmt"
+      ],
+      "groupName": "mise formatters and linters"
+    },
+    {
+      "description": "Group mise language servers",
+      "matchManagers": ["mise"],
+      "matchDepNames": [
+        "lua-language-server",
+        "npm:bash-language-server",
+        "npm:vscode-langservers-extracted"
+      ],
+      "groupName": "mise language servers"
+    },
+    {
+      "description": "1Password publishes the CLI only on its own site. Its release history lists every version, and betas are skipped because their paths carry a suffix after the patch number. rangeStrategy pin rejects versions from this datasource as invalid, so this rule uses replace.",
+      "matchManagers": ["mise"],
+      "matchDepNames": ["op", "vfox:op"],
+      "overrideDatasource": "custom.1password-cli",
+      "overridePackageName": "1password-cli",
+      "extractVersion": "/op2/pkg/v(?<version>\\d+\\.\\d+\\.\\d+)/op_darwin_arm64_",
+      "rangeStrategy": "replace"
+    }
+  ],
+  "customDatasources": {
+    "1password-cli": {
+      "defaultRegistryUrlTemplate": "https://app-updates.agilebits.com/product_history/CLI2",
+      "format": "html"
+    }
+  }
+}

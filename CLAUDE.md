@@ -42,4 +42,5 @@ changes behavior) bumps the major version.
 | Failing job    | Local command                                           |
 | -------------- | ------------------------------------------------------- |
 | `Lint`         | `mise run check`                                        |
+| `Self-test`    | `mise run self-test`                                    |
 | `Linked issue` | Put `Closes #<number>` for an open issue in the PR body |

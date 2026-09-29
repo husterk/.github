@@ -12,3 +12,5 @@ actionlint
 
 mapfile -t md_files < <(git ls-files '*.md')
 python3 scripts/check-us-spelling.py "${md_files[@]}"
+
+renovate-config-validator --strict --no-global renovate/*.json renovate.json
