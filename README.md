@@ -5,12 +5,15 @@ by [husterk](https://github.com/husterk).
 
 ## Contents
 
-| Path                                                                                            | What it is                                                               | How a repo uses it                                                                            |
-| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| `SECURITY.md`, `CONTRIBUTING.md`, `.github/ISSUE_TEMPLATE/`, `.github/pull_request_template.md` | Default community health files                                           | GitHub shows them in every husterk repository, public or private, that has no copy of its own |
-| `renovate/default.json`                                                                         | Base Renovate config                                                     | `"extends": ["github>husterk/.github//renovate/default#vX.Y.Z"]`                              |
-| `renovate/mise.json`                                                                            | Groups for mise tools, and the 1Password CLI lookup                      | `"extends": ["github>husterk/.github//renovate/mise#vX.Y.Z"]`                                 |
-| `actions/linked-issue/`                                                                         | Composite action that fails a PR whose body does not close an open issue | `uses: husterk/.github/actions/linked-issue@<sha> # vX.Y.Z`                                   |
+| Path                                                                                            | What it is                                                           | How a repository uses it                                                                      |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `SECURITY.md`, `CONTRIBUTING.md`, `.github/ISSUE_TEMPLATE/`, `.github/pull_request_template.md` | Default community health files                                       | GitHub shows them in every husterk repository, public or private, that has no copy of its own |
+| `renovate/default.json`                                                                         | Base Renovate config                                                 | `"extends": ["github>husterk/.github//renovate/default#vX.Y.Z"]`                              |
+| `renovate/mise.json`                                                                            | Groups for mise tools, and the 1Password CLI lookup                  | `"extends": ["github>husterk/.github//renovate/mise#vX.Y.Z"]`                                 |
+| `actions/linked-issue/`                                                                         | Fails a PR whose body does not close an open issue                   | `uses: husterk/.github/actions/linked-issue@<sha> # vX.Y.Z` in a job named `Linked issue`     |
+| `templates/`                                                                                    | Ruleset JSON, `renovate.json`, `pr-policy.yml`, `CLAUDE.md` skeleton | Copied into a repository when it is created or audited                                        |
+| `scripts/audit-repo.sh`                                                                         | Read-only comparison of a repository with the baseline               | `mise run audit -- husterk/<repo>`                                                            |
+| `docs/`                                                                                         | The guides for creating and auditing public and private repositories | Read by people and agents                                                                     |
 
 ## Versioning
 

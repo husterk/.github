@@ -1,0 +1,17 @@
+name: PR policy
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  linked-issue:
+    name: Linked issue
+    runs-on: ubuntu-latest
+    steps:
+      - uses: husterk/.github/actions/linked-issue@PIN_TO_RELEASE_SHA # v1.0.0
