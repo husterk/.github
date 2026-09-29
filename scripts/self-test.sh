@@ -20,6 +20,9 @@ usage() {
 mode="$1"
 root="$(git rev-parse --show-toplevel)"
 repo="${PRESET_REPO:-husterk/.github}"
+# Resolved here because the mise shim cannot pick a version from inside the
+# temporary fixture directory, which has no mise.toml.
+renovate_bin="$(mise which renovate 2> /dev/null || command -v renovate)"
 
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
@@ -55,7 +58,7 @@ log="$work/renovate.log"
 (
   cd "$work"
   RENOVATE_TOKEN="$token" GITHUB_COM_TOKEN="$token" LOG_LEVEL=debug LOG_FORMAT=json \
-    renovate --platform=local --dry-run=lookup --repository-cache=disabled
+    "$renovate_bin" --platform=local --dry-run=lookup --repository-cache=disabled
 ) > "$log" 2>&1 || {
   tail -20 "$log"
   echo "Renovate exited with an error" >&2
