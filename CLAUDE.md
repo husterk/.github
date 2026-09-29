@@ -33,6 +33,9 @@ building blocks for every repository `husterk` owns.
 2. After the PR merges, tag the merge commit with a signed tag:
    `git tag -s vX.Y.Z -m vX.Y.Z && git push origin vX.Y.Z`.
 3. Create the GitHub release from the tag with the CHANGELOG entry as notes.
+4. Merge the `husterk/.github` PR Renovate then opens in this repository. It
+   moves the pins in `templates/` to the new tag, so new repositories start
+   on the latest release.
 
 A breaking change (a renamed check, a removed input, a preset option that
 changes behavior) bumps the major version.

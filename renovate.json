@@ -3,5 +3,11 @@
   "extends": [
     "github>husterk/.github//renovate/default",
     "github>husterk/.github//renovate/mise"
-  ]
+  ],
+  "github-actions": {
+    "managerFilePatterns": ["/^templates/pr-policy\\.yml$/"]
+  },
+  "renovate-config": {
+    "managerFilePatterns": ["/^templates/renovate\\.json$/"]
+  }
 }
