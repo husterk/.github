@@ -20,9 +20,11 @@ usage() {
 mode="$1"
 root="$(git rev-parse --show-toplevel)"
 repo="${PRESET_REPO:-husterk/.github}"
-# Resolved here because the mise shim cannot pick a version from inside the
-# temporary fixture directory, which has no mise.toml.
+# Resolved here because mise shims cannot pick a version from inside the
+# temporary fixture directory, which has no mise.toml. Renovate needs the
+# pinned Node too, or it runs on whatever node the runner ships.
 renovate_bin="$(mise which renovate 2> /dev/null || command -v renovate)"
+node_dir="$(dirname "$(mise which node 2> /dev/null || command -v node)")"
 
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
@@ -57,7 +59,7 @@ token="${GITHUB_COM_TOKEN:-${GITHUB_TOKEN:-$(gh auth token 2> /dev/null || true)
 log="$work/renovate.log"
 (
   cd "$work"
-  RENOVATE_TOKEN="$token" GITHUB_COM_TOKEN="$token" LOG_LEVEL=debug LOG_FORMAT=json \
+  PATH="$node_dir:$PATH" RENOVATE_TOKEN="$token" GITHUB_COM_TOKEN="$token" LOG_LEVEL=debug LOG_FORMAT=json \
     "$renovate_bin" --platform=local --dry-run=lookup --repository-cache=disabled
 ) > "$log" 2>&1 || {
   tail -20 "$log"
