@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.2
+
+- A private repository under a personal account enforces the Actions
+  allowlist, third-party patterns included, and SHA pinning, and allows
+  husterk's own actions without a pattern. The private guide records the
+  evidence, and `scripts/audit-repo.sh` now reports FAIL for both rules on
+  private repositories.
+
 ## v1.0.1
 
 - The guides record that a repository set to "selected actions" runs
