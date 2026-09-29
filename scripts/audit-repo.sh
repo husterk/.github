@@ -7,8 +7,8 @@ set -euo pipefail
 #   audit-repo.sh OWNER/REPO
 #
 # FAIL marks a baseline rule the repository breaks. WARN marks a default the
-# repository may skip with a reason in its CLAUDE.md, or a rule not yet proven
-# on private repositories. Exits 1 when any FAIL is reported.
+# repository may skip with a reason in its CLAUDE.md. Exits 1 when any FAIL is
+# reported.
 
 repo="${1:?usage: audit-repo.sh OWNER/REPO}"
 fails=0
@@ -46,8 +46,6 @@ field() {
 meta="$(gh api "repos/$repo")"
 visibility="$(jq -r .visibility <<< "$meta")"
 branch="$(jq -r .default_branch <<< "$meta")"
-private_warn=warn
-[ "$visibility" = public ] && private_warn=fail
 
 echo "== $repo ($visibility, default branch $branch)"
 
@@ -78,8 +76,8 @@ workflow="$(api "repos/$repo/actions/permissions/workflow")"
 expect fail "default token read-only" "$(field "$workflow" .default_workflow_permissions)" read
 expect fail "token cannot approve PRs" "$(field "$workflow" .can_approve_pull_request_reviews)" false
 actions="$(api "repos/$repo/actions/permissions")"
-expect "$private_warn" "only selected actions allowed" "$(field "$actions" .allowed_actions)" selected
-expect "$private_warn" "actions pinned by SHA required" "$(field "$actions" .sha_pinning_required)" true
+expect fail "only selected actions allowed" "$(field "$actions" .allowed_actions)" selected
+expect fail "actions pinned by SHA required" "$(field "$actions" .sha_pinning_required)" true
 if [ "$visibility" = public ]; then
   expect fail "fork PRs need approval for all outside contributors" \
     "$(api "repos/$repo/actions/permissions/fork-pr-contributor-approval" -q .approval_policy)" all_external_contributors
