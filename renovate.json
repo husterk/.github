@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
-  "labels": ["dependencies"],
-  "rangeStrategy": "pin"
+  "extends": [
+    "github>husterk/.github//renovate/default",
+    "github>husterk/.github//renovate/mise"
+  ]
 }

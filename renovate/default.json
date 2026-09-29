@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Base Renovate config for husterk's repositories",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "labels": ["dependencies"],
+  "rangeStrategy": "pin",
+  "schedule": ["* 0-5 1 */2 *"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["* 0-5 1 */2 *"]
+  },
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["dependencies", "security"],
+    "schedule": ["* 0-5 1,15 * *"]
+  },
+  "packageRules": [
+    {
+      "description": "Group GitHub Actions minor and patch updates",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "github actions"
+    }
+  ]
+}
