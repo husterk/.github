@@ -287,9 +287,13 @@ These are the same as in a public repo:
   put `#<n>` in a commit message, and sign every commit.
 - **Verify before merging.** Run each acceptance criterion and post the
   results on the issue.
+- **Who acts next.** Every open issue carries exactly one of `next: agent`,
+  `next: human` and `next: waiting`, with the rules in section 8 of the
+  public guide.
 - **CLAUDE.md.** Give the rules, the commands, and a table mapping each CI job
   to its local command. State whether the repo might go public (section 0).
-- **Labels.** `task`, `bug`, `build`, `dependencies`, `security`. Copy them
+- **Labels.** `task`, `bug`, `build`, `dependencies`, `security` and the
+  three `next:` labels. Copy them
   with `gh label clone husterk/.github --repo "$R"`.
 
 ## 9. Lifecycle: archive and delete

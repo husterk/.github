@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.3.0
+
+- Three labels, `next: agent`, `next: human` and `next: waiting`, mark who
+  acts next on every open issue. The guides and `templates/CLAUDE.md` give
+  the rules, and `scripts/audit-repo.sh` warns when a label is missing or an
+  open issue lacks exactly one of them.
+
 ## v1.2.0
 
 - `docs/cloudflare-sites.md` covers sites hosted on Cloudflare: static
