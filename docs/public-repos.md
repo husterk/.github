@@ -427,10 +427,29 @@ gh api "repos/$R/commits/$(gh pr view <n> --repo "$R" --json headRefOid -q .head
   every commit through 1Password.
 - **Verify before merging.** Run each acceptance criterion and post the
   commands and results as a comment on the issue.
+- **Who acts next.** Every open issue carries exactly one of three labels:
+
+    | Label           | Meaning                                                                                            |
+    | --------------- | -------------------------------------------------------------------------------------------------- |
+    | `next: agent`   | An agent can finish it with the access it has                                                      |
+    | `next: human`   | The owner acts first: a dashboard or console step, a credential, something physical, or a decision |
+    | `next: waiting` | Nobody can act until an outside event or a date                                                    |
+
+    The label names who is next, not who owns the issue, so it changes at
+    every handoff. An agent that reaches a step only the owner can do switches
+    the label to `next: human` and comments the exact steps: where to click,
+    what to paste, or the decision with a recommended answer. When the owner
+    is done, the label goes back to `next: agent`. A `next: waiting` issue
+    says what it waits for and when to check. An agent working through issues
+    takes only `next: agent` ones. Closed issues and Renovate's Dependency
+    Dashboard carry no `next:` label, and type labels such as `task` and `bug`
+    stay alongside.
+
 - **CLAUDE.md.** Give the rules, the commands, and a table mapping each
   required CI job to its local command. Where a repo departs from this guide,
   say so there, with the reason.
-- **Labels.** At least `task`, `bug`, `build`, `dependencies` and `security`.
+- **Labels.** At least `task`, `bug`, `build`, `dependencies`, `security`
+  and the three `next:` labels.
   Copy them with `gh label clone husterk/.github --repo "$R"`, which adds
   missing labels and never changes existing ones. Renovate uses
   `dependencies`, and the default issue forms set `task` and `bug`. A repo with its own scheme, such as

@@ -8,6 +8,9 @@ how to run it.
 - **An issue comes first.** One branch and one PR per issue. Name the branch
   `<type>/<issue-number>-<slug>` and put `Closes #<number>` in the PR body.
   Commit messages never contain `#<number>`.
+- **Every open issue says who acts next** with one label: `next: agent`,
+  `next: human` or `next: waiting`. Switch it at each handoff, and comment
+  the exact steps when handing to a human.
 - **Commits are signed.** Merge with the squash or merge button only.
 - **Verify before merging.** Run each acceptance criterion and post the
   commands and results as a comment on the issue.
