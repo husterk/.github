@@ -14,4 +14,4 @@ jobs:
     name: Linked issue
     runs-on: ubuntu-latest
     steps:
-      - uses: husterk/.github/actions/linked-issue@9648b8bcbc3386eb20ef683d4da442e5c1c47f8b # v1.3.0
+      - uses: husterk/.github/actions/linked-issue@e185687173376b1b2ff79f7911897e904f88791d # v1.3.1
