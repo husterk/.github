@@ -11,6 +11,8 @@
 - The guides say a release workflow derives its version from tags and never
   pushes to `main`, and that path-filtered release pipelines exclude the
   baseline files.
+- The guides say how Renovate's PRs stay current under strict required
+  checks: Renovate rebases them itself, so nobody updates them by hand.
 
 ## v1.1.1
 

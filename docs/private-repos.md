@@ -154,6 +154,13 @@ that runs with `if: always()`. With strict checks on, update a PR branch by
 rebasing locally, then run `git push --force-with-lease`. Don't use GitHub's
 "Update branch" button.
 
+Renovate keeps its own PRs current. Its default `rebaseWhen: "auto"` reads the
+ruleset's strict required status checks and rebases a PR that falls behind
+`main` on its next run (verified in Renovate's GitHub platform code,
+`checkRulesetsForForceRebase`). To rebase one sooner, tick the rebase checkbox
+in the PR body. Don't update a Renovate branch by hand: Renovate stops
+managing a branch that someone else has changed.
+
 A workflow that releases on merge works out the version from the latest `v*`
 tag and the merged commits, writes it only into what it builds, and creates
 the tag and the GitHub release with `GITHUB_TOKEN` (`contents: write`). It
