@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.3.1
+
+- The guides drop GitHub's unused default labels (`duplicate`,
+  `good first issue`, `help wanted`, `invalid`, `question`, `wontfix`), and
+  the audit warns when one is present.
+- A closed issue's `next:` label no longer matters, so merging a PR needs no
+  label cleanup.
+
 ## v1.3.0
 
 - Three labels, `next: agent`, `next: human` and `next: waiting`, mark who

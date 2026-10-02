@@ -293,7 +293,7 @@ These are the same as in a public repo:
 - **CLAUDE.md.** Give the rules, the commands, and a table mapping each CI job
   to its local command. State whether the repo might go public (section 0).
 - **Labels.** `task`, `bug`, `build`, `dependencies`, `security` and the
-  three `next:` labels. Copy them
+  three `next:` labels. Delete GitHub's unused defaults as in the public guide. Copy them
   with `gh label clone husterk/.github --repo "$R"`.
 
 ## 9. Lifecycle: archive and delete
