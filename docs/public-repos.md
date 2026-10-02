@@ -229,6 +229,16 @@ gh api -X POST "repos/$R/rulesets" --input ruleset-main.json
 A repo that publishes releases also adds `templates/ruleset-release-tags.json`,
 which stops a `v*` tag from being moved or deleted.
 
+A workflow that releases on merge works out the version from the latest `v*`
+tag and the merged commits, writes it only into what it builds, and creates
+the tag and the GitHub release with `GITHUB_TOKEN` (`contents: write`). It
+never pushes a commit to `main`. A bypass actor that lets a bot push version
+bumps is a departure to remove: the bot's commit is unsigned, and the audit
+reports both the bypass and the unsigned newest commit. A pipeline that
+decides from changed paths whether to release must exclude the baseline files
+(`CLAUDE.md`, `.github/workflows/pr-policy.yml`), or adopting the baseline
+publishes a release.
+
 The same ruleset, written out:
 
 ```bash
@@ -331,14 +341,14 @@ Workflow behaviors to know:
 
 ## 6. Secrets and environments
 
-| Item                           | Expected                                                                                                                                                                                                    |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Repository secrets             | None that can deploy or unlock production. A repo secret is readable from every branch of the repo.                                                                                                         |
-| Production credentials         | An environment secret on a `production` environment whose deployment branch policy allows only `main`                                                                                                       |
-| 1Password                      | One service account per repo and purpose. Its vault holds only what that workflow needs.                                                                                                                    |
-| PR preview or test credentials | A separate environment and service account, never production's                                                                                                                                              |
-| Bot PRs                        | Skip any job that loads credentials when `github.event.pull_request.user.login == 'renovate[bot]'`. Renovate branches live in the same repo and pass the usual `head.repo == github.repository` fork guard. |
-| Ordering                       | Load secrets after `install` steps only if you trust every dependency. Dependency code runs in later steps that can read exported environment variables.                                                    |
+| Item                           | Expected                                                                                                                                                                                                                                           |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Repository secrets             | None that can deploy or unlock production. A repo secret is readable from every branch of the repo.                                                                                                                                                |
+| Production credentials         | An environment secret on a `production` environment whose deployment branch policy allows only `main`                                                                                                                                              |
+| 1Password                      | One service account per repo and purpose. Its vault holds only what that workflow needs.                                                                                                                                                           |
+| PR preview or test credentials | A separate environment and service account, never production's. A Cloudflare Workers preview is the exception: it uses the deploy token, for the reasons in [the Cloudflare sites guide](cloudflare-sites.md#4-api-token-and-preview-credentials). |
+| Bot PRs                        | Skip any job that loads credentials when `github.event.pull_request.user.login == 'renovate[bot]'`. Renovate branches live in the same repo and pass the usual `head.repo == github.repository` fork guard.                                        |
+| Ordering                       | Load secrets after `install` steps only if you trust every dependency. Dependency code runs in later steps that can read exported environment variables.                                                                                           |
 
 Verify:
 
