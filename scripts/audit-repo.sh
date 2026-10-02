@@ -121,6 +121,10 @@ for label in task bug build dependencies security "next: agent" "next: human" "n
   if grep -qx "$label" <<< "$labels"; then pass "label $label"; else warn "label $label missing (gh label clone husterk/.github --repo $repo)"; fi
 done
 
+for label in duplicate "good first issue" "help wanted" invalid question wontfix; do
+  if grep -qx "$label" <<< "$labels"; then warn "unused default label $label present (gh label delete \"$label\" --repo $repo --yes)"; fi
+done
+
 echo "-- Issues"
 unmarked="$(api "repos/$repo/issues?state=open&per_page=100" -q '.[] | select(.pull_request == null and .title != "Dependency Dashboard") | select(([.labels[].name | select(startswith("next: "))] | length) != 1) | "#\(.number)"' | paste -sd' ' -)"
 if [ -z "$unmarked" ]; then pass "every open issue has exactly one next: label"; else warn "open issues without exactly one next: label: $unmarked"; fi

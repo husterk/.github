@@ -441,9 +441,9 @@ gh api "repos/$R/commits/$(gh pr view <n> --repo "$R" --json headRefOid -q .head
     what to paste, or the decision with a recommended answer. When the owner
     is done, the label goes back to `next: agent`. A `next: waiting` issue
     says what it waits for and when to check. An agent working through issues
-    takes only `next: agent` ones. Closed issues and Renovate's Dependency
-    Dashboard carry no `next:` label, and type labels such as `task` and `bug`
-    stay alongside.
+    takes only `next: agent` ones. Renovate's Dependency Dashboard carries no
+    `next:` label, a closed issue's label no longer matters, and type labels
+    such as `task` and `bug` stay alongside.
 
 - **CLAUDE.md.** Give the rules, the commands, and a table mapping each
   required CI job to its local command. Where a repo departs from this guide,
@@ -451,7 +451,9 @@ gh api "repos/$R/commits/$(gh pr view <n> --repo "$R" --json headRefOid -q .head
 - **Labels.** At least `task`, `bug`, `build`, `dependencies`, `security`
   and the three `next:` labels.
   Copy them with `gh label clone husterk/.github --repo "$R"`, which adds
-  missing labels and never changes existing ones. Renovate uses
+  missing labels and never changes existing ones. A new repository starts with
+  GitHub's default labels; delete `duplicate`, `good first issue`,
+  `help wanted`, `invalid`, `question` and `wontfix`, which nothing here uses. Renovate uses
   `dependencies`, and the default issue forms set `task` and `bug`. A repo with its own scheme, such as
   `area:*`, `type:*` or milestones, keeps it.
 
