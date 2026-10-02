@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.2.0
+
+- `docs/cloudflare-sites.md` covers sites hosted on Cloudflare: static
+  assets on Workers instead of Pages, the deploy and preview jobs, the
+  workers.dev noindex rule, the API token, moving a custom domain, and Web
+  Analytics setup.
+- Preview jobs for Cloudflare Workers use the deploy token. The guides
+  record why a separate preview token does not protect production there.
+- The guides say a release workflow derives its version from tags and never
+  pushes to `main`, and that path-filtered release pipelines exclude the
+  baseline files.
+
 ## v1.1.1
 
 - `renovate/mise` also resolves the 1Password CLI when `mise.toml` names it

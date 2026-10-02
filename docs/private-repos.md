@@ -154,6 +154,16 @@ that runs with `if: always()`. With strict checks on, update a PR branch by
 rebasing locally, then run `git push --force-with-lease`. Don't use GitHub's
 "Update branch" button.
 
+A workflow that releases on merge works out the version from the latest `v*`
+tag and the merged commits, writes it only into what it builds, and creates
+the tag and the GitHub release with `GITHUB_TOKEN` (`contents: write`). It
+never pushes a commit to `main`. A bypass actor that lets a bot push version
+bumps is a departure to remove: the bot's commit is unsigned, and the audit
+reports both the bypass and the unsigned newest commit. A pipeline that
+decides from changed paths whether to release must exclude the baseline files
+(`CLAUDE.md`, `.github/workflows/pr-policy.yml`), or adopting the baseline
+publishes a release.
+
 ## 4. GitHub Actions
 
 | Setting                            | Value                                                                                                                                                                                                   |
@@ -220,12 +230,13 @@ Expected:
 
 ## 6. Secrets and environments
 
-| Item                   | Expected                                                                                                                     |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Repository secrets     | None that can deploy or unlock production. A repo secret is readable from every branch.                                      |
-| Production credentials | An environment secret on a `production` environment whose deployment branch policy allows only `main`                        |
-| 1Password              | One service account per repo and purpose. Its vault holds only what that workflow needs. Delete accounts whose repo is gone. |
-| Bot PRs                | Skip any job that loads credentials when `github.event.pull_request.user.login == 'renovate[bot]'`                           |
+| Item                   | Expected                                                                                                                                                                                                                           |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Repository secrets     | None that can deploy or unlock production. A repo secret is readable from every branch.                                                                                                                                            |
+| Production credentials | An environment secret on a `production` environment whose deployment branch policy allows only `main`                                                                                                                              |
+| 1Password              | One service account per repo and purpose. Its vault holds only what that workflow needs. Delete accounts whose repo is gone.                                                                                                       |
+| Bot PRs                | Skip any job that loads credentials when `github.event.pull_request.user.login == 'renovate[bot]'`                                                                                                                                 |
+| PR previews            | A separate service account, never production's. A Cloudflare Workers preview is the exception: it uses the deploy token, for the reasons in [the Cloudflare sites guide](cloudflare-sites.md#4-api-token-and-preview-credentials). |
 
 Verify:
 
