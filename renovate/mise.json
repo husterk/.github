@@ -3,7 +3,7 @@
   "description": "Groups for mise tools, and a lookup for the 1Password CLI. mise names match with matchDepNames because matchPackageNames sees the resolved name, such as mvdan/sh for shfmt.",
   "packageRules": [
     {
-      "description": "Group mise formatters and linters",
+      "description": "Group major updates of mise formatters and linters. Their minor and patch updates join the all non-major group.",
       "matchManagers": ["mise"],
       "matchDepNames": [
         "actionlint",
@@ -21,16 +21,18 @@
         "taplo",
         "treefmt"
       ],
+      "matchUpdateTypes": ["major"],
       "groupName": "mise formatters and linters"
     },
     {
-      "description": "Group mise language servers",
+      "description": "Group major updates of mise language servers. Their minor and patch updates join the all non-major group.",
       "matchManagers": ["mise"],
       "matchDepNames": [
         "lua-language-server",
         "npm:bash-language-server",
         "npm:vscode-langservers-extracted"
       ],
+      "matchUpdateTypes": ["major"],
       "groupName": "mise language servers"
     },
     {

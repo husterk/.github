@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Run Renovate in lookup mode against test/renovate-fixture and fail unless
-# every expected group branch appears and Renovate logs no warnings. The one
+# every expected group branch and limit appears and Renovate logs no warnings. The one
 # warning ignored is about the environment: mise installs Renovate without
 # building its optional native RE2 module.
 #
@@ -90,7 +90,7 @@ branches="$(jq -r 'select(.msg == "packageFiles with updates") | .config[]?[]?.d
 echo "Branches Renovate would open:"
 printf '  %s\n' "$branches"
 
-for expected in renovate/mise-formatters-and-linters renovate/mise-language-servers; do
+for expected in renovate/all-minor-patch renovate/major-mise-language-servers; do
   if grep -qx "$expected" <<< "$branches"; then
     echo "PASS $expected"
   else
@@ -98,6 +98,24 @@ for expected in renovate/mise-formatters-and-linters renovate/mise-language-serv
     fail=1
   fi
 done
+
+stray="$(jq -r 'select(.msg == "packageFiles with updates") | .config[]?[]?.deps[]? | select(.depName != "husterk/.github") | .depName as $d
+  | .updates[]? | select(.updateType != "major" and .branchName != "renovate/all-minor-patch") | "\($d) on \(.branchName)"' "$json" | sort -u)"
+if [ -z "$stray" ]; then
+  echo "PASS every minor and patch update shares renovate/all-minor-patch"
+else
+  echo "FAIL non-major updates outside renovate/all-minor-patch:"
+  printf '  %s\n' "$stray"
+  fail=1
+fi
+
+limits="$(jq -c 'select(.msg | startswith("Resolved shallow config")) | .config | [.prConcurrentLimit, .prHourlyLimit, .rebaseWhen]' "$json" | head -1)"
+if [ "$limits" = '[3,2,"conflicted"]' ]; then
+  echo "PASS at most 3 open PRs, 2 per hour, rebased only on conflict"
+else
+  echo "FAIL prConcurrentLimit, prHourlyLimit, rebaseWhen: $limits"
+  fail=1
+fi
 
 for name in op 1password; do
   update="$(jq -r --arg n "$name" 'select(.msg == "packageFiles with updates") | .config.mise[]?.deps[]? | select(.depName == $n) | .updates[0].newValue // empty' "$json")"

@@ -1,13 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "description": "Base Renovate config for husterk's repositories",
-  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    "group:allNonMajor"
+  ],
   "labels": ["dependencies"],
   "rangeStrategy": "pin",
-  "schedule": ["* 0-5 1 */2 *"],
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2,
+  "rebaseWhen": "conflicted",
+  "schedule": ["* 0-5 1 * *"],
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["* 0-5 1 */2 *"]
+    "schedule": ["* 0-5 1 * *"]
   },
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
@@ -16,12 +23,6 @@
     "schedule": ["* 0-5 1,15 * *"]
   },
   "packageRules": [
-    {
-      "description": "Group GitHub Actions minor and patch updates",
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "github actions"
-    },
     {
       "description": "One PR per husterk/.github release, covering the presets and the action, opened without waiting for the schedule",
       "matchDepNames": ["husterk/.github"],

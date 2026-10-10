@@ -1,5 +1,20 @@
 # Changelog
 
+## v2.0.0
+
+- `renovate/default` opens at most 3 PRs per repository (`prConcurrentLimit`)
+  and 2 per hour (`prHourlyLimit`). Security fix PRs skip both limits.
+- `renovate/default` sets `rebaseWhen: "conflicted"`. Under strict required
+  checks, the default rebased every open Renovate PR after each merge and
+  reran CI on all of them. To merge a PR that is behind `main`, tick its
+  rebase checkbox.
+- `renovate/default` puts every minor and patch update in one PR
+  (`group:allNonMajor`), replacing the GitHub Actions-only group. Each major
+  update keeps its own PR.
+- `renovate/mise` groups formatter and language server updates only when they
+  are major.
+- Updates and lock file maintenance run monthly instead of every second month.
+
 ## v1.3.1
 
 - The guides drop GitHub's unused default labels (`duplicate`,
