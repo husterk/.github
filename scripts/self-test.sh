@@ -109,7 +109,7 @@ else
   fail=1
 fi
 
-limits="$(jq -c 'select(.msg == "Repository config") | .config | [.prConcurrentLimit, .prHourlyLimit, .rebaseWhen]' "$json" | head -1)"
+limits="$(jq -c 'select(.msg | startswith("Resolved shallow config")) | .config | [.prConcurrentLimit, .prHourlyLimit, .rebaseWhen]' "$json" | head -1)"
 if [ "$limits" = '[3,2,"conflicted"]' ]; then
   echo "PASS at most 3 open PRs, 2 per hour, rebased only on conflict"
 else
