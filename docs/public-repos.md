@@ -290,12 +290,19 @@ so the names must match exactly.
 With strict checks on, update a PR branch by rebasing locally, then run
 `git push --force-with-lease`. Don't use GitHub's "Update branch" button.
 
-Renovate keeps its own PRs current. Its default `rebaseWhen: "auto"` reads the
-ruleset's strict required status checks and rebases a PR that falls behind
-`main` on its next run (verified in Renovate's GitHub platform code,
-`checkRulesetsForForceRebase`). To rebase one sooner, tick the rebase checkbox
-in the PR body. Don't update a Renovate branch by hand: Renovate stops
-managing a branch that someone else has changed.
+The shared preset limits Renovate to 3 open PRs per repository and 2 new ones
+per hour. It opens them in a window on the night of the 1st of each month.
+Every minor and patch update shares one PR, and each major update gets its own.
+Security fix PRs skip both limits.
+
+The preset also sets `rebaseWhen: "conflicted"`, so Renovate rebases a PR only
+when it conflicts with `main`. Renovate's default, `"auto"`, reads the
+ruleset's strict required status checks (`checkRulesetsForForceRebase` in its
+GitHub platform code) and rebases every PR that falls behind `main`. Each merge
+would then rerun CI on every other open Renovate PR. To merge a PR that is
+behind `main`, tick the rebase checkbox in its body. Wait for Renovate's
+rebase and the checks to pass, then merge. Don't update a Renovate branch by
+hand: Renovate stops managing a branch that someone else has changed.
 
 ## 5. GitHub Actions
 
