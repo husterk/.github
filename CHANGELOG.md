@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.1
+
+- The repository guides add a rule for secrets several repos share: a shared vault is for people and local tooling only, and a repo's automation gets its own credential from the provider instead of reading the shared vault.
+
 ## v2.1.0
 
 - The public and private repository guides describe one CI access model:
