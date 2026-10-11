@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.2
+
+- `renovate/mise` points `aqua:1password/cli` at the 1Password CLI datasource. The hosted Renovate app locks mise tools in safe mode, which can't install the vfox plugin behind `op`, so repositories pin the CLI through mise's built-in aqua backend instead.
+
 ## v2.1.1
 
 - The repository guides add a rule for secrets several repos share: a shared vault is for people and local tooling only, and a repo's automation gets its own credential from the provider instead of reading the shared vault.
