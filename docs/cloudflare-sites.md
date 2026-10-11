@@ -87,11 +87,19 @@ The deploy token needs:
 | Account                     | Account Settings: Read | Wrangler resolves the account                                   |
 | Zone (the site's zone only) | Workers Routes: Edit   | `wrangler deploy` re-applies the custom domains on every deploy |
 
-Preview jobs use the same 1Password service account and token as the deploy
-job, not a separate one. A preview upload needs Account `Workers Scripts:
-Edit`, and that permission also deploys to production, so a separate preview
-token would not keep a leaked credential away from production. What keeps the
-token from untrusted code:
+Preview jobs use their own `preview` environment and service account, which
+reads only a preview vault. The preview token needs:
+
+| Scope   | Permission             | Why                           |
+| ------- | ---------------------- | ----------------------------- |
+| Account | Workers Scripts: Edit  | Upload preview versions       |
+| Account | Account Settings: Read | Wrangler resolves the account |
+
+`Workers Scripts: Edit` can also deploy to production, so the preview token
+is not harmless. The split still keeps the deploy account's token and every
+non-Cloudflare secret off PR branches, and the preview token has no zone
+permission, so it cannot change custom domains. What keeps it from untrusted
+code:
 
 - GitHub gives fork PRs no secrets, and the preview job's fork guard skips
   them.
@@ -100,9 +108,8 @@ token from untrusted code:
 - Only the owner pushes branches. Revisit this section if anyone else gets
   push access.
 
-The service account token is therefore a repository secret, readable from
-PR branches, and the audit lists it as information. The deploy job still runs
-in a `production` environment limited to `main`.
+The `preview` environment has no deployment branch policy, so PR branches can
+use it. The deploy job runs in a `production` environment limited to `main`.
 
 ## 5. Moving a custom domain
 

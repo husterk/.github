@@ -244,13 +244,14 @@ Expected:
 
 ## 6. Secrets and environments
 
-| Item                   | Expected                                                                                                                                                                                                                           |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Repository secrets     | None that can deploy or unlock production. A repo secret is readable from every branch.                                                                                                                                            |
-| Production credentials | An environment secret on a `production` environment whose deployment branch policy allows only `main`                                                                                                                              |
-| 1Password              | One service account per repo and purpose. Its vault holds only what that workflow needs. Delete accounts whose repo is gone.                                                                                                       |
-| Bot PRs                | Skip any job that loads credentials when `github.event.pull_request.user.login == 'renovate[bot]'`                                                                                                                                 |
-| PR previews            | A separate service account, never production's. A Cloudflare Workers preview is the exception: it uses the deploy token, for the reasons in [the Cloudflare sites guide](cloudflare-sites.md#4-api-token-and-preview-credentials). |
+| Item                       | Expected                                                                                                                                                                                                                                                                                 |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Repository secrets         | None. A repository secret is readable from every branch, so the audit fails on any.                                                                                                                                                                                                      |
+| `OP_SERVICE_ACCOUNT_TOKEN` | The only GitHub secret. An environment secret on a deploy environment, usually `production`, whose deployment branch policy allows only `main`. Jobs that need it declare that environment.                                                                                              |
+| 1Password                  | One service account per repo and purpose, read-only on that repo's own vault, which holds only what the workflow needs. Store each account's token item outside every vault a service account can read. Delete accounts whose repo is gone.                                              |
+| PR previews                | A `preview` environment with no deployment branch policy, holding a second service account that reads only a preview vault. Never production's account. For Cloudflare Workers, see [the Cloudflare sites guide](cloudflare-sites.md#4-api-token-and-preview-credentials).               |
+| Tailnet access             | A workflow that joins the tailnet uses a per-repo tag `tag:ci-<repo>`, an OAuth client limited to that tag, grants only to the hosts that repo needs, and policy `tests` that assert the allowed and the blocked paths. The OAuth client lives in 1Password like every other credential. |
+| Bot PRs                    | Skip any job that loads credentials when `github.event.pull_request.user.login == 'renovate[bot]'`. Renovate branches live in the same repo and pass the usual `head.repo == github.repository` fork guard.                                                                              |
 
 Verify:
 

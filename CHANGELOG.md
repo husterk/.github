@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.1.0
+
+- The public and private repository guides describe one CI access model:
+    - `OP_SERVICE_ACCOUNT_TOKEN` is the only GitHub secret, kept in a deploy environment limited to `main`;
+    - one read-only 1Password service account per repo and purpose, with its token item stored outside every vault a service account can read;
+    - a separate `preview` environment and account for PR previews;
+    - a per-repo `tag:ci-<repo>` for workflows that join the tailnet.
+- The Cloudflare sites guide drops the exception that let Workers previews share the deploy token. Previews get their own account and a token with no zone permission.
+- `scripts/audit-repo.sh` reports FAIL for any repository secret, where it used to print INFO. An environment without a deployment branch policy is expected only when it is named `preview`.
+
 ## v2.0.1
 
 - `renovate/default` keeps every `husterk/.github` update in one PR, even
