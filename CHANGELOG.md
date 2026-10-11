@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.1
+
+- `renovate/default` keeps every `husterk/.github` update in one PR, even
+  when a repository is a major version behind. Before, Renovate split it into
+  a PR for the latest minor and a PR for the new major.
+
 ## v2.0.0
 
 - `renovate/default` opens at most 3 PRs per repository (`prConcurrentLimit`)
