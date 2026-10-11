@@ -156,14 +156,21 @@ done
 expect warn "a workflow runs the linked-issue action" "$linked" true
 
 echo "-- Secrets"
+repo_secrets=0
 for name in $(api "repos/$repo/actions/secrets" -q '.secrets[].name'); do
-  info "repository secret $name is readable from every branch"
+  fail "repository secret $name is readable from every branch; move it to an environment"
+  repo_secrets=$((repo_secrets + 1))
 done
+[ "$repo_secrets" -eq 0 ] && pass "no repository secrets"
 for env in $(api "repos/$repo/environments" -q '.environments[].name'); do
   policy="$(api "repos/$repo/environments/$env" -q '.deployment_branch_policy // "none"')"
   secrets="$(api "repos/$repo/environments/$env/secrets" -q '.total_count')"
   if [ "${secrets:-0}" -gt 0 ] && [ "$policy" = none ]; then
-    warn "environment $env holds secrets but has no deployment branch policy"
+    if [ "$env" = preview ]; then
+      info "environment preview is open to PR branches, as the preview model expects"
+    else
+      warn "environment $env holds secrets but has no deployment branch policy"
+    fi
   fi
 done
 
