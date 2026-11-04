@@ -61,10 +61,15 @@ on every audit:
 
 ```bash
 nix run nixpkgs#gitleaks -- git --no-banner --redact /path/to/clone
-nix run nixpkgs#trufflehog -- git file:///path/to/clone --no-update --json | nix run nixpkgs#jq -- -r '"\(.DetectorName) verified=\(.Verified) \(.SourceMetadata.Data.Git.file)"'
+results=$(mktemp)
+nix run nixpkgs#trufflehog -- git file:///path/to/clone --json > "$results" &&
+  nix run nixpkgs#jq -- -r '"\(.DetectorName) verified=\(.Verified) \(.SourceMetadata.Data.Git.file)"' "$results"
 ```
 
-Expected: gitleaks prints `no leaks found`, and trufflehog prints nothing.
+Expected: gitleaks prints `no leaks found`. TruffleHog's last log line says
+`finished scanning` with `verified_secrets` and `unverified_secrets` at 0, and
+`jq` prints nothing. If TruffleHog prints an error or exits non-zero, nothing
+was scanned, so the scan has not passed.
 When a scanner finds a real secret, rotate it first. Removing it from the
 history comes second, because anyone with access may already have a copy.
 
