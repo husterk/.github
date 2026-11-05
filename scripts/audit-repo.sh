@@ -154,6 +154,24 @@ for wf in $workflows; do
   fi
 done
 expect warn "a workflow runs the linked-issue action" "$linked" true
+mise_steps=0
+unpinned_mise=0
+for wf in $workflows; do
+  counts="$(api "repos/$repo/contents/.github/workflows/$wf" -q .content | base64 --decode 2> /dev/null | awk '
+    /uses: jdx\/mise-action@/ { steps++; unpinned += open; open = 1; next }
+    open && /^[[:space:]]*version:/ { open = 0 }
+    open && /^[[:space:]]*- / { unpinned++; open = 0 }
+    END { print steps + 0, unpinned + open }
+  ')"
+  mise_steps=$((mise_steps + ${counts% *}))
+  if [ "${counts#* }" -gt 0 ]; then
+    warn "$wf has ${counts#* } jdx/mise-action step(s) with no version"
+    unpinned_mise=$((unpinned_mise + ${counts#* }))
+  fi
+done
+if [ "$mise_steps" -gt 0 ] && [ "$unpinned_mise" -eq 0 ]; then
+  pass "every jdx/mise-action step sets version"
+fi
 
 echo "-- Secrets"
 repo_secrets=0
