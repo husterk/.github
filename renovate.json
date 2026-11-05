@@ -9,5 +9,12 @@
   },
   "renovate-config": {
     "managerFilePatterns": ["/^templates/renovate\\.json$/"]
-  }
+  },
+  "packageRules": [
+    {
+      "description": "Update the mise CLI on its own, so a breaking release fails a PR that changes nothing else",
+      "matchDepNames": ["jdx/mise"],
+      "groupName": "mise CLI"
+    }
+  ]
 }

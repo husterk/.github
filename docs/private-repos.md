@@ -288,6 +288,8 @@ grep -rn 'secrets\.' .github/workflows
 - The shared presets already avoid the traps listed in section 7 of the
   public guide: `automergeStrategy` without `automerge`, `matchPackageNames`
   on mise names, and the 1Password CLI lookup.
+- Pin the mise version on every `jdx/mise-action` step, as step 5 of section 7
+  of the public guide describes.
 
 ## 8. Working conventions (Default)
 

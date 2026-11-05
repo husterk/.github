@@ -393,6 +393,12 @@ grep -rn 'secrets\.' .github/workflows
 3. Keep the Dependabot security updates off (section 3).
 4. Renovate's `renovate-config` manager bumps the pinned preset tag in a PR
    when `husterk/.github` releases a new version.
+5. Set `version` on every `jdx/mise-action` step. Without it, the action
+   installs the newest mise release at least 24 hours old, so a breaking mise
+   release can fail CI with no commit in the repo. Renovate's `github-actions`
+   manager tracks the input. Add a `packageRules` entry with
+   `"matchDepNames": ["jdx/mise"]` and `"groupName": "mise CLI"`, so the update
+   gets its own PR.
 
 Traps found in September 2026:
 
