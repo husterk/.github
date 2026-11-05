@@ -4,7 +4,7 @@ min_version = "2026.1.2"
 "aqua:numtide/treefmt" = "2.6.0"
 "aqua:rhysd/actionlint" = "1.7.12"
 jq = "1.8.2"
-node = "24.22.2"
+node = "26.13.0"
 # @yarnpkg/libzip 3.2.2 was published by hand by a Yarn maintainer without
 # the provenance attestation 3.2.0 and 3.2.1 carry. Its gitHead is Yarn's own
 # release commit for that version, so the trust policy excludes that one
